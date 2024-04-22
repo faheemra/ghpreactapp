@@ -1,4 +1,3 @@
-
 name: Continuous Integration
 
 on:
@@ -11,17 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Build the Docker image
       - name: Build Docker image
         run: |
           docker build -t web-app:${{ github.sha }} .
+      
       - name: Deploy with gh-pages
         run: |
-           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-           npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+          git config --global user.email "f.ramzan@abhi.com.pk"
+          git config --global user.name "faheemra"
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git checkout main
+          npm install
+          npm run deploy
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
